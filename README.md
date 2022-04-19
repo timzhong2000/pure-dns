@@ -4,7 +4,7 @@
 
 ### 多协议
 
-支持提供tcp和udp的dns服务，并且支持多上游配置
+支持提供tcp和udp的dns服务，并且支持dns over udp/tcp/tls 上游服务。
 
 ### 加速dns
 
@@ -24,17 +24,29 @@
 
 ```json
 {
-  "net": "tcp",             // "udp" | "tcp"
-  "listen": "0.0.0.0:5353", // "<ip>:<port>"
+  "net": "udp",                     // "udp" | "tcp"
+  "listen": "0.0.0.0:53",           // "<ip>:<port>"
   "upstreams": [
     {
-      "net": "udp",
-      "address": "119.29.29.29:53"
+      "net": "udp",                 // "udp" | "tcp" | "tcp-tls"
+      "address": "119.29.29.29:53"  // "<ip>:<port>"
     },
     {
       "net": "tcp",
       "address": "8.8.8.8:53"
+    },
+    {
+      "net": "tcp-tls",
+      "address": "8.8.8.8:853"
     }
   ]
 }
 ```
+
+## 未来的新功能
+- [ ] 统计功能
+- [ ] 支持提供tls服务
+- [ ] 对于不可信dns上游限制可返回的ip段
+
+## 不会添加的功能
+- dns缓存和域名分流。因为本项目只是个单纯的dns转发器，开多个pure-dns实例然后使用dnsmasq作为缓存和分流是更好的选择。
