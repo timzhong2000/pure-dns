@@ -14,7 +14,7 @@
 	help
 
 BINARY="pure-dns"
-VERSION="0.1.0"
+VERSION="v0.1.1"
 
 all: format build.linux/amd64
 
