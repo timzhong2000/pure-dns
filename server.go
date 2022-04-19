@@ -53,6 +53,8 @@ func (server *server) Resolve(req *dns.Msg) (ok bool, res *dns.Msg) {
 		result.SetReply(req)
 		return true, result
 	case <-time.After(time.Duration(time.Second * 5)):
-		return false, nil
+		emptyMsg := dns.Msg{}
+		emptyMsg.SetReply(req)
+		return false, &emptyMsg
 	}
 }
