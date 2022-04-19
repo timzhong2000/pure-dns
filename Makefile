@@ -46,19 +46,19 @@ build.linux/arm64:
 
 build.windows/386:
 	@[ -d build ] || mkdir build
-	CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_386.exe
+	CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_386.exe
 
 build.windows/amd64:
 	@[ -d build ] || mkdir build
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_amd64.exe
+	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_amd64.exe
 
 build.windows/arm:
 	@[ -d build ] || mkdir build
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_arm.exe
+	CGO_ENABLED=0 GOOS=windows GOARCH=arm go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_arm.exe
 
 build.windows/arm64:
 	@[ -d build ] || mkdir build
-	CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_arm64.exe
+	CGO_ENABLED=0 GOOS=windows GOARCH=arm64 go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_arm64.exe
 
 run:
 	@go run .
