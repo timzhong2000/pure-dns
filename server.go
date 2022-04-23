@@ -25,9 +25,6 @@ func MakeServer() (ok bool, server server) {
 		ok = false
 		return
 	}
-	for _, up := range server.Upstreams {
-		up.Init()
-	}
 	ok = true
 	return
 }
