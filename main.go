@@ -1,6 +1,9 @@
 package main
 
 func main() {
-	server := MakeServer()
-	server.ListenAndServe()
+	if ok, server := MakeServer(); !ok {
+		return
+	} else {
+		server.ListenAndServe()
+	}
 }

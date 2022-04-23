@@ -15,11 +15,20 @@ type server struct {
 	Upstreams []upstream `fig:"upstreams" default:"[]"`
 }
 
-func MakeServer() (server server) {
-	fig.Load(&server,
+func MakeServer() (ok bool, server server) {
+	err := fig.Load(&server,
 		fig.File("setting.json"),
 		fig.Dirs("/etc/pure-dns", "."),
 	)
+	if err != nil {
+		log.Printf("Load config failed! please place setting.json in /etc/pure-dns OR the same folder of this executable file.")
+		ok = false
+		return
+	}
+	for _, up := range server.Upstreams {
+		up.Init()
+	}
+	ok = true
 	return
 }
 
