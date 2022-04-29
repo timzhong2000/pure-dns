@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"log"
-	"strings"
 	"time"
 
 	dnsproxy "github.com/AdguardTeam/dnsproxy/upstream"
@@ -85,16 +84,21 @@ func (upstream *upstream) GetExchanger() func(m *dns.Msg, address string) (r *dn
 	}
 }
 
-func getAnswer(raw string) string {
-	return strings.Split(raw, "\t")[4]
+// get head n byte of a string
+func getHead(str string, n int) string {
+	if strLen := len(str); strLen < n {
+		return str[0:strLen]
+	} else {
+		return str[0:n] + "..."
+	}
 }
 
 func (upstream *upstream) Resolve(req *dns.Msg) (ok bool, res *dns.Msg, rtt time.Duration) {
 	if result, rtt, err := upstream.GetExchanger()(req, upstream.Address); err != nil {
-		log.Printf("[error]\tresolve: %v\tupstream: %v://%v\treason: \"%v\"", req.Question[0].Name, upstream.Net, upstream.Address, err.Error())
+		log.Printf("[error]\tresolve: %v\tupstream: %v://%v\treason: \"%v\"", getHead(req.Question[0].Name, 20), upstream.Net, getHead(upstream.Address, 20), err.Error())
 		return false, nil, time.Microsecond * 0
 	} else {
-		log.Printf("[success]\tresolve: %v\tresult: %v\trtt: %v\tupstream: %v://%v", req.Question[0].Name, getAnswer(result.Answer[0].String()), rtt, upstream.Net, upstream.Address)
+		log.Printf("[success]\tresolve: %v\trtt: %v\tupstream: %v://%v", getHead(req.Question[0].Name, 20), rtt, upstream.Net, getHead(upstream.Address, 20))
 		return true, result, rtt
 	}
 }
