@@ -19,7 +19,7 @@ builds:
     # Binary name.
     # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
     # Default is the name of the project directory.
-    binary: pure-dns
+    # binary: pure-dns
 
     # Custom flags templates.
     # Default is empty.
@@ -62,7 +62,6 @@ builds:
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Defaults are darwin and linux.
     goos:
-      - freebsd
       - windows
       - darwin
       - linux
@@ -73,15 +72,14 @@ builds:
     goarch:
       - 386
       - amd64
-      - arm
       - arm64
 
     # GOARM to build for when GOARCH is arm.
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Default is only 6.
-    goarm:
-      - 6
-      - 7
+    # goarm:
+    #   - 6
+    #   - 7
 
     # GOAMD64 to build when GOARCH is amd64.
     # For more info refer to: https://golang.org/doc/install/source#environment
@@ -93,9 +91,9 @@ builds:
     # GOMIPS and GOMIPS64 to build when GOARCH is mips, mips64, mipsle or mips64le.
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Default is only hardfloat.
-    gomips:
-      - hardfloat
-      - softfloat
+    # gomips:
+    #   - hardfloat
+    #   - softfloat
 
     # List of combinations of GOOS + GOARCH + GOARM to ignore.
     # Default is empty.
