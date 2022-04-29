@@ -11,7 +11,7 @@ import (
 type upstream struct {
 	Net            string `fig:"net" default:"udp"`
 	Address        string `fig:"address"`
-	SkipCertVerify bool   `fig:"skipCertVerify" default:false`
+	SkipCertVerify bool   `fig:"skipCertVerify" default:"false"`
 	Timeout        int    `fig:"timeout" default:"1000"`
 }
 

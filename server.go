@@ -22,7 +22,7 @@ func MakeServer() (ok bool, server server) {
 	)
 	if err != nil {
 		log.Print(err.Error())
-		log.Printf("Load config failed! please place setting.json in /etc/pure-dns OR the same folder of this executable file.")
+		log.Printf("Load config failed!")
 		ok = false
 		return
 	}

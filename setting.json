@@ -5,12 +5,14 @@
     {
       "net": "udp",
       "address": "119.29.29.99:53",
-      "timeout": 1000
+      "timeout": 1000,
+      "skipCertVerify": true
     },
     {
       "net": "tcp",
       "address": "8.8.8.8:53",
-      "timeout": 1000
+      "timeout": 1000,
+      "skipCertVerify": true
     },
     {
       "net": "tcp-tls",
