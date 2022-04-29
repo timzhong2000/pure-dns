@@ -1,8 +1,9 @@
-name: goreleaser
+name: release
 
 on:
   push:
-    branches: [ feat/github-action, master ]
+    tags:
+      - '*'
 
 permissions:
   contents: write
