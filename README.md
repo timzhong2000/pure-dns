@@ -4,13 +4,13 @@
 
 ### 多协议
 
-支持提供tcp和udp的dns服务，并且支持dns over udp/tcp/tls 上游服务。
+支持提供tcp和udp的dns服务，并且支持dns over udp/tcp/tcp-tls/https(doh)/quic/sdns(DNSCrypt) 上游服务。
 
-### 加速dns
+### 加速响应
 
 从多个上游选择最快的一个响应。
 
-### 可追溯
+### 易调试
 
 所有dns请求都会返回一个dns.provider的TXT记录，携带了本次请求选择的上游和本次请求的耗时
 
@@ -26,22 +26,33 @@
 {
   "net": "udp",                     // "udp" | "tcp"
   "listen": "0.0.0.0:53",           // "<ip>:<port>"
-  "timeout: 1000,                   // 1000ms
+  "timeout": 2000,                  // 2000ms
   "upstreams": [
     {
-      "net": "udp",                 // "udp" | "tcp" | "tcp-tls"
-      "address": "119.29.29.29:53", // "<ip>:<port>"
-      "skipCertVerify": true
+      "net": "udp",                 // "udp" | "tcp" | "tcp-tls" | "https" | "quic" | "sdns"
+      "address": "8.8.8.8:53",
+      "mode": "dnsproxy"            // optional(default hybrid). when using hybrid mode the upstream of udp/tcp/tcp-tls is provided by miekg/dns
     },
     {
       "net": "tcp",
       "address": "8.8.8.8:53",
-      "skipCertVerify": true
+      "mode": "hybrid"
     },
     {
       "net": "tcp-tls",
-      "address": "8.8.8.8:853",
-      "skipCertVerify": true
+      "address": "1.1.1.1:853"
+    },
+    {
+      "net": "https",
+      "address": "dns.adguard.com/dns-query"
+    },
+    {
+      "net": "quic",
+      "address": "dns.adguard.com:853"
+    },
+    {
+      "net": "sdns",
+      "address": "AQIAAAAAAAAAFDE3Ni4xMDMuMTMwLjEzMDo1NDQzINErR_JS3PLCu_iZEIbq95zkSV2LFsigxDIuUso_OQhzIjIuZG5zY3J5cHQuZGVmYXVsdC5uczEuYWRndWFyZC5jb20"
     }
   ]
 }
