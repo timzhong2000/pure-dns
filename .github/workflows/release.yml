@@ -2,9 +2,7 @@ name: goreleaser
 
 on:
   push:
-    # run only against tags
-    tags:
-      - '*'
+    branches: [ feat/github-action, master ]
 
 permissions:
   contents: write
