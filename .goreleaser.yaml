@@ -85,9 +85,9 @@ builds:
     # GOAMD64 to build when GOARCH is amd64.
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Default is only v1.
-    goamd64:
-      - v2
-      - v3
+    # goamd64:
+    #   - v2
+    #   - v3
 
     # GOMIPS and GOMIPS64 to build when GOARCH is mips, mips64, mipsle or mips64le.
     # For more info refer to: https://golang.org/doc/install/source#environment
