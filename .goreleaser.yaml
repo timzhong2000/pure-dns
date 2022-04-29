@@ -19,7 +19,7 @@ builds:
     # Binary name.
     # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
     # Default is the name of the project directory.
-    # binary: pure-dns
+    binary: pure-dns_{{ .Os }}_{{ .Arch }}
 
     # Custom flags templates.
     # Default is empty.
@@ -62,6 +62,7 @@ builds:
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Defaults are darwin and linux.
     goos:
+      - freebsd
       - windows
       - darwin
       - linux
@@ -70,15 +71,17 @@ builds:
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Defaults are 386, amd64 and arm64.
     goarch:
+      - 386
       - amd64
+      - arm
       - arm64
 
     # GOARM to build for when GOARCH is arm.
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Default is only 6.
-    # goarm:
-    #   - 6
-    #   - 7
+    goarm:
+      - 6
+      - 7
 
     # GOAMD64 to build when GOARCH is amd64.
     # For more info refer to: https://golang.org/doc/install/source#environment
@@ -116,12 +119,12 @@ builds:
     # - go_first_class: evaluates to latest stable go first-class targets, currently same as 1.18.
     #
     # This overrides `goos`, `goarch`, `goarm`, `gomips`, `goamd64` and `ignores`.
-    targets:
-      - go_first_class
-      - go_118_first_class
-      - linux_amd64_v1
-      - darwin_arm64
-      - linux_arm_6
+    # targets:
+    #   - go_first_class
+    #   - go_118_first_class
+    #   - linux_amd64_v1
+    #   - darwin_arm64
+    #   - linux_arm_6
 
     # Set a specific go binary to use when building.
     # It is safe to ignore this option in most cases.
