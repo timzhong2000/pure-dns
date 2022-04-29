@@ -26,18 +26,22 @@
 {
   "net": "udp",                     // "udp" | "tcp"
   "listen": "0.0.0.0:53",           // "<ip>:<port>"
+  "timeout: 1000,                   // 1000ms
   "upstreams": [
     {
       "net": "udp",                 // "udp" | "tcp" | "tcp-tls"
-      "address": "119.29.29.29:53"  // "<ip>:<port>"
+      "address": "119.29.29.29:53", // "<ip>:<port>"
+      "skipCertVerify": true
     },
     {
       "net": "tcp",
-      "address": "8.8.8.8:53"
+      "address": "8.8.8.8:53",
+      "skipCertVerify": true
     },
     {
       "net": "tcp-tls",
-      "address": "8.8.8.8:853"
+      "address": "8.8.8.8:853",
+      "skipCertVerify": true
     }
   ]
 }

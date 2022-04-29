@@ -1,23 +1,11 @@
 {
   "net": "udp",
   "listen": "0.0.0.0:5353",
+  "timeout": 1000,
   "upstreams": [
-    {
-      "net": "udp",
-      "address": "119.29.29.99:53",
-      "timeout": 1000,
-      "skipCertVerify": true
-    },
-    {
-      "net": "tcp",
-      "address": "8.8.8.8:53",
-      "timeout": 1000,
-      "skipCertVerify": true
-    },
     {
       "net": "tcp-tls",
       "address": "8.8.8.8:853",
-      "timeout": 1000,
       "skipCertVerify": true
     }
   ]

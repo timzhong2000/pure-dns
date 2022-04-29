@@ -12,6 +12,7 @@ import (
 type server struct {
 	Net       string     `fig:"net" default:"udp"`
 	Listen    string     `fig:"listen" default:"0.0.0.0:53"`
+	Timeout   int        `fig:"timeout" default:"1000"`
 	Upstreams []upstream `fig:"upstreams" default:"[]"`
 }
 
@@ -59,7 +60,7 @@ func (server *server) Resolve(req *dns.Msg) (ok bool, res *dns.Msg) {
 	case result := <-c:
 		result.SetReply(req)
 		return true, result
-	case <-time.After(time.Duration(time.Second * 5)):
+	case <-time.After(time.Duration(server.Timeout) * time.Millisecond):
 		emptyMsg := dns.Msg{}
 		emptyMsg.SetReply(req)
 		return false, &emptyMsg

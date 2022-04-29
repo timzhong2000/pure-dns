@@ -12,15 +12,14 @@ type upstream struct {
 	Net            string `fig:"net" default:"udp"`
 	Address        string `fig:"address"`
 	SkipCertVerify bool   `fig:"skipCertVerify" default:"false"`
-	Timeout        int    `fig:"timeout" default:"1000"`
 }
 
 func (upstream *upstream) Resolve(req *dns.Msg) (ok bool, res *dns.Msg, rtt time.Duration) {
 	var client dns.Client
 	if upstream.Net == "tcp-tls" {
-		client = dns.Client{Net: upstream.Net, Timeout: time.Duration(upstream.Timeout) * time.Millisecond, TLSConfig: &tls.Config{InsecureSkipVerify: upstream.SkipCertVerify}}
+		client = dns.Client{Net: upstream.Net, Timeout: 5 * time.Second, TLSConfig: &tls.Config{InsecureSkipVerify: upstream.SkipCertVerify}}
 	} else {
-		client = dns.Client{Net: upstream.Net, Timeout: time.Duration(upstream.Timeout) * time.Millisecond}
+		client = dns.Client{Net: upstream.Net, Timeout: 5 * time.Second}
 	}
 	if result, rtt, err := client.Exchange(req, upstream.Address); err != nil {
 		log.Printf("[error]\tresolve: %v\tupstream: %v\treason: \"%v\"", req.Question[0].Name, upstream.Address, err.Error())
