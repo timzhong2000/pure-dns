@@ -1,3 +1,5 @@
 .vscode
 build
 pure-dns
+dist
+setting.json
