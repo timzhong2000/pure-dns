@@ -62,7 +62,6 @@ builds:
     # For more info refer to: https://golang.org/doc/install/source#environment
     # Defaults are darwin and linux.
     goos:
-      - freebsd
       - windows
       - darwin
       - linux
@@ -105,11 +104,9 @@ builds:
       - goos: darwin
         goarch: arm
       - goos: linux
+        goarch: 386
+      - goos: windows
         goarch: arm
-        goarm: 7
-      - goarm: mips64
-      - gomips: hardfloat
-      - goamd64: v4
 
     # Optionally override the matrix generation and specify only the final list of targets.
     # Format is `{goos}_{goarch}` with optionally a suffix with `_{goarm}`, `_{goamd64}` or `_{gomips}`.
