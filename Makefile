@@ -14,7 +14,7 @@
 	help
 
 BINARY="pure-dns"
-VERSION="v0.1.1"
+VERSION="v0.1.3"
 
 all: format build.linux/amd64
 
@@ -51,7 +51,7 @@ build.windows/386:
 build.windows/amd64:
 	@[ -d build ] || mkdir build
 	CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_amd64.exe
-
+	
 build.windows/arm:
 	@[ -d build ] || mkdir build
 	CGO_ENABLED=0 GOOS=windows GOARCH=arm go build -ldflags="-s -w" -o ./build/${BINARY}_${VERSION}_windows_arm.exe
