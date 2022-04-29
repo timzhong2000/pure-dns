@@ -17,7 +17,7 @@ type upstream struct {
 
 func (upstream *upstream) Resolve(req *dns.Msg) (ok bool, res *dns.Msg, rtt time.Duration) {
 	var client dns.Client
-	if upstream.Net == "tls-tcp" {
+	if upstream.Net == "tcp-tls" {
 		client = dns.Client{Net: upstream.Net, Timeout: time.Duration(upstream.Timeout) * time.Millisecond, TLSConfig: &tls.Config{InsecureSkipVerify: upstream.SkipCertVerify}}
 	} else {
 		client = dns.Client{Net: upstream.Net, Timeout: time.Duration(upstream.Timeout) * time.Millisecond}
