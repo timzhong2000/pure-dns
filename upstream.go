@@ -11,7 +11,7 @@ import (
 type upstream struct {
 	Net            string `fig:"net" default:"udp"`
 	Address        string `fig:"address"`
-	SkipCertVerify bool   `fig:"skipCertVerify" default:"false"`
+	SkipCertVerify bool   `fig:"skipCertVerify"`
 }
 
 func (upstream *upstream) Resolve(req *dns.Msg) (ok bool, res *dns.Msg, rtt time.Duration) {
