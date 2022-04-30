@@ -71,6 +71,9 @@ func (server *server) Resolve(req *dns.Msg) (ok bool, res *dns.Msg) {
 		result.SetReply(req)
 		return true, result
 	case <-time.After(time.Duration(server.Timeout) * time.Millisecond):
+		lock.Lock()
+		defer lock.Unlock()
+		isClosed = true
 		emptyMsg := dns.Msg{}
 		emptyMsg.SetReply(req)
 		return false, &emptyMsg
