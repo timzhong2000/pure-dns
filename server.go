@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/kkyr/fig"
@@ -47,12 +48,21 @@ func (s *server) ListenAndServe() {
 
 func (server *server) Resolve(req *dns.Msg) (ok bool, res *dns.Msg) {
 	c := make(chan *dns.Msg)
+	defer close(c)
+	var lock sync.Mutex
+	isClosed := false
+
 	for _, item := range server.Upstreams {
 		go func(upstream upstream) {
 			if ok, res, rtt := upstream.Resolve(req); ok {
 				identRR, _ := dns.NewRR(fmt.Sprintf("%s TXT %s://%s ttl:%s", "dns.provider", upstream.Net, upstream.Address, rtt.String()))
 				res.Answer = append(res.Answer, identRR)
-				c <- res
+				lock.Lock()
+				defer lock.Unlock()
+				if !isClosed {
+					c <- res
+					isClosed = true
+				}
 			}
 		}(item)
 	}
