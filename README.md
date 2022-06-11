@@ -6,6 +6,9 @@
 
 支持提供tcp和udp的dns服务，并且支持dns over udp/tcp/tcp-tls/https(doh)/quic/sdns(DNSCrypt) 上游服务。
 
+### 黑名单模式
+支持设定cidr格式的ipv4黑名单，避免网络提供商返回的明显错误的dns应答。
+
 ### 加速响应
 
 从多个上游选择最快的一个响应。
@@ -75,6 +78,9 @@ $ pure-dns
       "net": "sdns",
       "address": "AQIAAAAAAAAAFDE3Ni4xMDMuMTMwLjEzMDo1NDQzINErR_JS3PLCu_iZEIbq95zkSV2LFsigxDIuUso_OQhzIjIuZG5zY3J5cHQuZGVmYXVsdC5uczEuYWRndWFyZC5jb20"
     }
+  ],
+  "blackList": [
+    "192.168.16.0/24"     // 必须是CIDR格式
   ]
 }
 ```
@@ -82,7 +88,7 @@ $ pure-dns
 ## 未来的新功能
 - [ ] 统计功能
 - [x] 支持提供tls服务
-- [ ] 对于不可信dns上游限制可返回的ip段
+- [x] 对于不可信dns上游限制可返回的ip段
 
 ## 不会添加的功能
 - dns缓存和域名分流。因为本项目只是个单纯的dns转发器，开多个pure-dns实例然后使用dnsmasq作为缓存和分流是更好的选择。
