@@ -6,6 +6,7 @@ require (
 	github.com/AdguardTeam/dnsproxy v0.42.2
 	github.com/kkyr/fig v0.3.0
 	github.com/miekg/dns v1.1.48
+	github.com/yl2chen/cidranger v1.0.2
 )
 
 require (

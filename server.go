@@ -3,17 +3,21 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"time"
 
 	"github.com/kkyr/fig"
 	"github.com/miekg/dns"
+	"github.com/yl2chen/cidranger"
 )
 
 type server struct {
-	Net       string     `fig:"net" default:"udp"`
-	Listen    string     `fig:"listen" default:"0.0.0.0:53"`
-	Timeout   int        `fig:"timeout" default:"1000"`
-	Upstreams []upstream `fig:"upstreams" default:"[]"`
+	Net             string     `fig:"net" default:"udp"`
+	Listen          string     `fig:"listen" default:"0.0.0.0:53"`
+	Timeout         int        `fig:"timeout" default:"1000"`
+	Upstreams       []upstream `fig:"upstreams" default:"[]"`
+	BlackList       []string   `fig:"blackList" default:"[]"`
+	blackListRanger cidranger.Ranger
 }
 
 func MakeServer() (ok bool, server server) {
@@ -24,11 +28,17 @@ func MakeServer() (ok bool, server server) {
 	if err != nil {
 		log.Print(err.Error())
 		log.Printf("Load config failed!")
-		ok = false
-		return
+		return false, server
 	}
-	ok = true
-	return
+	server.blackListRanger = cidranger.NewPCTrieRanger()
+	for _, blockCidrString := range server.BlackList {
+		if _, blockCidr, err := net.ParseCIDR(blockCidrString); err == nil {
+			server.blackListRanger.Insert(cidranger.NewBasicRangerEntry(*blockCidr))
+		} else {
+			log.Printf("%s is not a CIDR format string. Please set blacklist string like 192.168.1.0/24", blockCidrString)
+		}
+	}
+	return true, server
 }
 
 func (s *server) ListenAndServe() {
@@ -50,6 +60,13 @@ func (server *server) Resolve(req *dns.Msg) (ok bool, res *dns.Msg) {
 	for _, item := range server.Upstreams {
 		go func(upstream upstream) {
 			if ok, res, rtt := upstream.Resolve(req); ok {
+				for _, answer := range res.Answer {
+					if dnsARecord, ok := answer.(*dns.A); ok {
+						if contains, _ := server.blackListRanger.Contains(dnsARecord.A); contains {
+							return
+						}
+					}
+				}
 				identRR, _ := dns.NewRR(fmt.Sprintf("%s TXT %s://%s ttl:%s", "dns.provider", upstream.Net, upstream.Address, rtt.String()))
 				res.Answer = append(res.Answer, identRR)
 				c <- res
