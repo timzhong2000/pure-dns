@@ -58,20 +58,7 @@ func (s *server) ListenAndServe() {
 func (server *server) Resolve(req *dns.Msg) (ok bool, res *dns.Msg) {
 	c := make(chan *dns.Msg)
 	for _, item := range server.Upstreams {
-		go func(upstream upstream) {
-			if ok, res, rtt := upstream.Resolve(req); ok {
-				for _, answer := range res.Answer {
-					if dnsARecord, ok := answer.(*dns.A); ok {
-						if contains, _ := server.blackListRanger.Contains(dnsARecord.A); contains {
-							return
-						}
-					}
-				}
-				identRR, _ := dns.NewRR(fmt.Sprintf("%s TXT %s://%s ttl:%s", "dns.provider", upstream.Net, upstream.Address, rtt.String()))
-				res.Answer = append(res.Answer, identRR)
-				c <- res
-			}
-		}(item)
+		go server.resolve(item, req, c)
 	}
 	select {
 	case result := <-c:
@@ -81,5 +68,27 @@ func (server *server) Resolve(req *dns.Msg) (ok bool, res *dns.Msg) {
 		emptyMsg := dns.Msg{}
 		emptyMsg.SetReply(req)
 		return false, &emptyMsg
+	}
+}
+
+func (server *server) resolve(upstream upstream, req *dns.Msg, c chan *dns.Msg) {
+	if ok, res, rtt := upstream.Resolve(req); ok {
+		for _, answer := range res.Answer {
+			if dnsARecord, ok := answer.(*dns.A); ok {
+				if contains, _ := server.blackListRanger.Contains(dnsARecord.A); contains {
+					log.Printf("[block]\tresolve: %s\trtt: %v\tanswer: %s\tupstream: %v://%v", dnsARecord.Hdr.Name, rtt, dnsARecord.A, upstream.Net, upstream.Address)
+					return
+				}
+			}
+			if dnsAAAARecord, ok := answer.(*dns.AAAA); ok {
+				if contains, _ := server.blackListRanger.Contains(dnsAAAARecord.AAAA); contains {
+					log.Printf("[block]\tresolve: %s\trtt: %v\tanswer: %s\tupstream: %v://%v", dnsAAAARecord.Hdr.Name, rtt, dnsAAAARecord.AAAA, upstream.Net, upstream.Address)
+					return
+				}
+			}
+		}
+		identRR, _ := dns.NewRR(fmt.Sprintf("%s TXT %s://%s ttl:%s", "dns.provider", upstream.Net, upstream.Address, rtt.String()))
+		res.Answer = append(res.Answer, identRR)
+		c <- res
 	}
 }

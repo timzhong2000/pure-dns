@@ -7,7 +7,7 @@
 支持提供tcp和udp的dns服务，并且支持dns over udp/tcp/tcp-tls/https(doh)/quic/sdns(DNSCrypt) 上游服务。
 
 ### 黑名单模式
-支持设定cidr格式的ipv4黑名单，避免网络提供商返回的明显错误的dns应答。
+支持设定cidr格式的ipv4和ipv6黑名单，避免网络提供商返回的明显错误的dns应答。
 
 ### 加速响应
 
@@ -25,7 +25,7 @@
 
 ### Linux
 
-1. 在右侧`Releases`根据系统和cpu架构下载编译好的二进制文件
+1. 在右侧 `Releases` 根据系统和cpu架构下载编译好的二进制文件
 2. 解压并且复制到 `/usr/bin` 下
 ``` bash
 tar -xzf ./pure-dns_0.1.7_linux_amd64.tar.gz && sudo mv pure-dns /usr/bin/pure-dns && sudo chmod +x /usr/bin/pure-dns
@@ -80,7 +80,8 @@ $ pure-dns
     }
   ],
   "blackList": [
-    "192.168.16.0/24"     // 必须是CIDR格式
+    "192.168.16.0/24",    // 必须是CIDR格式
+    "fe80::0/64"          // 也支持ipv6
   ]
 }
 ```
